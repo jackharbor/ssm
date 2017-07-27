@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="mvc.mybatis.dao.UserDao">
+	
+	<resultMap type="mvc.mybatis.pojo.User" id="userlist">
+		<result column="uuid" property="uuid" />
+		<result column="username" property="username" />
+		<result column="password" property="password" />
+		<result column="age" property="age" />
+		<result column="sex" property="sex" />
+		<result column="birthday" property="birthday" />
+	</resultMap>
+	
+	
+	<select id="getUserListByName" parameterType="string" resultMap="userlist">
+		SELECT
+		uuid,username,PASSWORD,age,sex,
+		DATE_FORMAT(birthday,'%Y-%m-%d %H:%i:%s') AS birthday
+		FROM USER WHERE username = #{username}
+	</select>
+	
+	<select id="userlist" resultType="java.util.HashMap">
+		SELECT * FROM T_USER
+	</select>
+	
+	<insert id="add" parameterType="mvc.mybatis.pojo.User">
+		<selectKey keyProperty="uuid" resultType="string" order="BEFORE">
+			SELECT UUID()
+		</selectKey>
+		
+		INSERT INTO user(uuid,username,password,age,sex,birthday) 
+		VALUES(#{uuid},#{username},#{password},#{age},#{sex},#{birthday})
+	</insert>
+	
+	
+	
+	
+
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="mvc.mybatis.dao.DocFileDao">
+	
+	<resultMap type="mvc.mybatis.pojo.DocFile" id="filelist">
+		<result column="uid" property="uid" />
+		<result column="filename" property="filename" />
+		<result column="filepath" property="filepath" />
+		<result column="uploader" property="uploader" />
+		<result column="uptime" property="uptime" />
+		<result column="md5" property="md5" />
+		<result column="bz" property="bz" />
+	</resultMap>
+	
+	
+	<select id="docfilelist" parameterType="mvc.mybatis.pojo.DocFile" resultMap="filelist">
+		SELECT uid,filename,filepath,uploader,
+		DATE_FORMAT(uptime,'%Y-%m-%d %H:%i:%s') AS uptime
+		md5,bz
+		FROM t_sys_file
+		<where>
+			<if test="md5!=null">
+				AND md5 = #{md5},
+			</if>
+		</where>
+	</select>
+	
+	
+	
+	<insert id="add" parameterType="mvc.mybatis.pojo.DocFile">
+		<selectKey keyProperty="uid" resultType="string" order="BEFORE">
+			SELECT UUID()
+		</selectKey>
+		
+		INSERT INTO t_sys_file(uid,filename,filepath,uploader,uptime,md5,bz) 
+		VALUES(#{uid},#{filename},#{filepath},#{uploader},#{uptime},#{md5},#{bz})
+	</insert>
+	
+	
+	
+	
+
+</mapper>
